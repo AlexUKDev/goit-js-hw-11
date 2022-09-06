@@ -1,0 +1,24 @@
+.form{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+}
+input{
+  height: 40px;
+    width: 200px;
+}
+
+button.load-more{
+      margin-left: auto;
+      margin-right: auto;
+      display: block;
+      margin-top: 15px;
+      height: 40px;
+      width: 100px;
+
+}
+
+.is-hidden{
+  display: none;
+}
