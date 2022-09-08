@@ -76,7 +76,13 @@ async function onMoreBtn() {
     const { data } = await axiosMoreRequst(page);
     renderMarkup(data.hits, renderGallery);
     gallary.refresh()
-    console.log(data.totalHits);
+    
+    const { height: cardHeight } = document.querySelector(".gallery").firstElementChild.getBoundingClientRect();
+    window.scrollBy({
+      top: cardHeight * 2,
+      behavior: "smooth",
+    });
+    
     let countOfViwedHits = data.totalHits <= page * 40;
     
     if (countOfViwedHits === true) {
