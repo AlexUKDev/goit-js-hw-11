@@ -33,41 +33,40 @@ const gallaryLibOptions = {
 
 async function onSubmit(e) {
   e.preventDefault();
-  let inputValue = e.currentTarget.elements.searchQuery.value;
+  let inputValue = e.currentTarget.elements.searchQuery.value.trim();
   
-  if (inputValue === '') {
-    Notify.warning(FAILE_MESSADGE, OPTIONS_NOTIFLIX);
-    return
-  }
-
-  page = 1;
-   
-  try {
-    const { data } = await axiosRequst(inputValue, page);
-    if (data.hits.length === 0) {
-      Notify.info(EMPTY_RESPONSE, OPTIONS_NOTIFLIX);
+    if (!inputValue) {
+      console.log(!inputValue)
+      Notify.warning(FAILE_MESSADGE, OPTIONS_NOTIFLIX);
       return
-      }
+    } 
+    page = 1;
+   
+    try {
+      const { data } = await axiosRequst(inputValue, page);
+      if (data.hits.length === 0) {
+        Notify.info(EMPTY_RESPONSE, OPTIONS_NOTIFLIX);
+        return
+        }
 
-    if (data.totalHits <= 40) {
-      moreBtn.classList.toggle("is-hidden") 
+      if (data.totalHits <= 40) {
+        moreBtn.classList.toggle("is-hidden") 
+        }
+      
+      cleanMarckup(renderGallery);
+      renderMarkup(data.hits, renderGallery);
+      moreBtn.classList.toggle("is-hidden")
+      
+      Notify.success(makeTotalMassage(data.totalHits), OPTIONS_NOTIFLIX);
+      
+      gallary = new SimpleLightbox('.gallery a', gallaryLibOptions);
+      
+      } catch (err) {
+        console.log(err)
+        Notify.failure(ERROR_MASSADGE, OPTIONS_NOTIFLIX);
       }
-     
-    cleanMarckup(renderGallery);
-    renderMarkup(data.hits, renderGallery);
-    moreBtn.classList.toggle("is-hidden")
-    
-    Notify.success(makeTotalMassage(data.totalHits), OPTIONS_NOTIFLIX);
-    
-    gallary = new SimpleLightbox('.gallery a', gallaryLibOptions);
-    
-  } catch (err) {
-    console.log(err)
-    Notify.failure(ERROR_MASSADGE, OPTIONS_NOTIFLIX);
-  }
 
 }
-
 
 async function onMoreBtn() {
   page += 1;
@@ -89,10 +88,7 @@ async function onMoreBtn() {
     console.log(err)
     Notify.failure(ERROR_MASSADGE, OPTIONS_NOTIFLIX);
   }
-
-}
-
-
+  }
 
 
 
