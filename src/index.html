@@ -8,10 +8,14 @@
   </head>
   <body>
     
-  <div class="form">
+  <div class="form-wrap">
     <form class="search-form" id="search-form">
-      <input type="text" name="searchQuery" autocomplete="off" placeholder="Search images..." />
-      <button type="submit">Search</button>
+      <input type="text" name="searchQuery" autocomplete="off" placeholder="Search images..."  class="subInput"/>
+      <button type="submit" class="btn sub-btn">
+        <svg class="submitBtn_icon">
+          <use href="./svg/icons.svg#icon-search"></use>
+        </svg>
+      </button>
     </form>
   </div>
 
@@ -19,25 +23,12 @@
   <!-- Карточки изображений -->
 </div>
 
-  <!-- <div class="photo-card">
-    <img src="" alt="" loading="lazy" />
-    <div class="info">
-      <p class="info-item">
-        <b>Likes</b>
-      </p>
-      <p class="info-item">
-        <b>Views</b>
-      </p>
-      <p class="info-item">
-        <b>Comments</b>
-      </p>
-      <p class="info-item">
-        <b>Downloads</b>
-      </p>
-    </div>
-  </div> -->
-  
-  <button type="button" class="load-more is-hidden">Load more</button>
+  <button type="button" class="btn load-more is-hidden">
+    <svg class="submitBtn_icon">
+      <use href="./svg/icons.svg#icon-search-more"></use>
+    </svg>
+    <span class="more-text">Load more</span>
+  </button>
 
     <!-- <include src="./partials/example.html"></include> -->
     <script type="module" src="./index.js"></script>

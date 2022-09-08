@@ -1,79 +1,89 @@
-import axios from "axios";
+
 import SimpleLightbox from "simplelightbox";
 import "simplelightbox/dist/simple-lightbox.min.css";
 import { Notify } from "notiflix";
+import { form, moreBtn, renderGallery } from "./moduls/refs";
+import { renderMarkup, cleanMarckup } from "./moduls/marckupFunctions";
+import { FAILE_MESSADGE, ERROR_MASSADGE, EMPTY_RESPONSE, END_MASSADGE,makeTotalMassage } from "./messages";
+import { axiosRequst, axiosMoreRequst } from './moduls/requestFunctions';
 
-const refs = {
-  form:document.querySelector('#search-form'),
-  submit: document.querySelector('[type="submit"]'),
-  moreBtn: document.querySelector('button[type="button"].load-more'),
-  renderDiv: document.querySelector('div.gallery')
+form.addEventListener('submit', onSubmit);
+moreBtn.addEventListener('click', onMoreBtn);
 
-}
+let page = 1;
+let gallary = {};
 
-refs.form.addEventListener('submit', onSubmit)
-
-const KEY = '29756284-9fd5906fdaeaa95b8e4b48e13';
-const BASE_URL = 'https://pixabay.com/api/';
-
-// const options = {
-//   key: KEY,
-//   q: "cat",
-//   image_type: "photo",
-//   orientation: "horizontal",
-//   safesearch: "true",
-//   page: "1",
-//   per_page: "40",
-// }
-
-axios.defaults.baseURL = BASE_URL;
-// axios.defaults.headers.common['Authorization'] = KEY;
+const OPTIONS_NOTIFLIX = {
+  width: "430px",
+  fontSize: "25px",
+  timeout: "3000",
+  distance:"20px",
+  cssAnimationDuration:"500",
+  borderRadius: "20px",
+  fontAwesomeIconStyle: "shadow",
+  cssAnimationStyle: "zoom",
+};
+const gallaryLibOptions = {
+  captionType: 'attr',
+  captionsData: "alt",
+  captionDelay: 250
+};
 
 
-function onSubmit(e) {
+
+async function onSubmit(e) {
   e.preventDefault();
-
   let inputValue = e.currentTarget.elements.searchQuery.value;
-  console.log(inputValue);
+  
+  if (inputValue === '') {
+    Notify.warning(FAILE_MESSADGE, OPTIONS_NOTIFLIX);
+    return
+  }
 
- axios.get(`?key=${KEY}&q=${inputValue}&image_type=photo&orientation=horizontal&page=1&per_page=40`)
-  .then(res => {
-    // console.log(res.data.hits)
-    renderMarkup(res.data.hits)
-  });
-}
-
-function renderMarkup(image) {
-    const markup = image
-    .map(({ webformatURL, largeImageURL, tags, likes, views, comments, downloads }) => {
-      return `
-      <a class="photo-link" href="${largeImageURL}">
-        <img class="image" src="${webformatURL}" alt="${tags}" loading="lazy"  width="300" height="300"/>
-      </a>
-
-    <p class="info-item">
-      <b> Лайки:
-       ${likes}</b>
-    </p>
-    <p class="info-item">
-      <b> Просмотры: ${views}</b>
-    </p>
-    <p class="info-item">
-      <b> Комментарии: ${comments}</b>
-    </p>
-    <p class="info-item">
-      <b> Загрузки: ${downloads}</b>
-    </p>
-
-`;
-    })
-    .join('');
-
-  refs.renderDiv.insertAdjacentHTML('beforeend', markup);
+  page = 1;
+  moreBtn.classList.toggle("is-hidden") 
+  try {
+    const { data } = await axiosRequst(inputValue, page);
+    if (data.hits.length === 0) {
+      Notify.info(EMPTY_RESPONSE, OPTIONS_NOTIFLIX);
+      return
+    }
+    cleanMarckup(renderGallery);
+    renderMarkup(data.hits, renderGallery);
+    Notify.success(makeTotalMassage(data.totalHits), OPTIONS_NOTIFLIX);
+    
+    gallary = new SimpleLightbox('.gallery a', gallaryLibOptions);
+    
+  } catch (err) {
+    console.log(err)
+    Notify.failure(ERROR_MASSADGE, OPTIONS_NOTIFLIX);
+  }
 
 }
 
 
+async function onMoreBtn() {
+  page += 1;
+  console.log(page);
+
+  try {
+    const { data } = await axiosMoreRequst(page);
+    renderMarkup(data.hits, renderGallery);
+    gallary.refresh()
+
+    let countOfViwedHits = data.totalHits <= page * 40;
+    
+    if (countOfViwedHits === true) {
+      moreBtn.classList.toggle("is-hidden") 
+       Notify.info(END_MASSADGE, OPTIONS_NOTIFLIX);
+    }
+    
+  } catch (err) {
+    console.log(err)
+    Notify.failure(ERROR_MASSADGE, OPTIONS_NOTIFLIX);
+  }
+
+}
 
 
 
@@ -83,8 +93,14 @@ function renderMarkup(image) {
 
 
 
+// e.g. Only message
+// Notiflix.Notify.success('Sol lucet omnibus');
 
+// Notiflix.Notify.failure('Qui timide rogat docet negare');
 
+// Notiflix.Notify.warning('Memento te hominem esse');
+
+// Notiflix.Notify.info('Cogito ergo sum');
 
 
 
