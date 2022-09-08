@@ -41,15 +41,22 @@ async function onSubmit(e) {
   }
 
   page = 1;
-  moreBtn.classList.toggle("is-hidden") 
+   
   try {
     const { data } = await axiosRequst(inputValue, page);
     if (data.hits.length === 0) {
       Notify.info(EMPTY_RESPONSE, OPTIONS_NOTIFLIX);
       return
-    }
+      }
+
+    if (data.totalHits <= 40) {
+      moreBtn.classList.toggle("is-hidden") 
+      }
+     
     cleanMarckup(renderGallery);
     renderMarkup(data.hits, renderGallery);
+    moreBtn.classList.toggle("is-hidden")
+    
     Notify.success(makeTotalMassage(data.totalHits), OPTIONS_NOTIFLIX);
     
     gallary = new SimpleLightbox('.gallery a', gallaryLibOptions);
@@ -70,7 +77,7 @@ async function onMoreBtn() {
     const { data } = await axiosMoreRequst(page);
     renderMarkup(data.hits, renderGallery);
     gallary.refresh()
-
+    console.log(data.totalHits);
     let countOfViwedHits = data.totalHits <= page * 40;
     
     if (countOfViwedHits === true) {
@@ -101,16 +108,3 @@ async function onMoreBtn() {
 // Notiflix.Notify.warning('Memento te hominem esse');
 
 // Notiflix.Notify.info('Cogito ergo sum');
-
-
-
-
-
-
-
-// fetch(`${BASE_URL}?key=${KEY}&q=cat&image_type=photo&orientation=horizontal`)
-//   .then((res) => {
-//   return res.json()
-// }).then((data) => {
-//   console.log(data.hits)
-// }).catch(err=>console.log)
