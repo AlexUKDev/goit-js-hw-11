@@ -13,7 +13,7 @@ moreBtn.addEventListener('click', onMoreBtn);
 let page = 1;
 let gallary = {};
 let inputValue = null;
-console.log(inputValue);
+
 const OPTIONS_NOTIFLIX = {
   width: "430px",
   fontSize: "25px",
@@ -35,7 +35,7 @@ const gallaryLibOptions = {
 async function onSubmit(e) {
   e.preventDefault();
    inputValue = e.currentTarget.elements.searchQuery.value.trim();
-  console.log(inputValue);
+  
     if (!inputValue) {
       console.log(!inputValue)
       Notify.warning(FAILE_MESSADGE, OPTIONS_NOTIFLIX);
