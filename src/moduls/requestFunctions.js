@@ -22,12 +22,13 @@ export async function axiosRequst(query, pageNumb) {
   return response
 }
 
-export async function axiosMoreRequst(pageNumb) {
+export async function axiosMoreRequst(query,pageNumb) {
    const optionsRequest = {
     baseURL: BASE_URL,
     method: 'get',
     params: {
       key: KEY_API,
+      q: query,
       image_type: "photo",
       orientaton: "horizontal",
       page: pageNumb,

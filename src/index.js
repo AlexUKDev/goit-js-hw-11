@@ -12,7 +12,8 @@ moreBtn.addEventListener('click', onMoreBtn);
 
 let page = 1;
 let gallary = {};
-
+let inputValue = null;
+console.log(inputValue);
 const OPTIONS_NOTIFLIX = {
   width: "430px",
   fontSize: "25px",
@@ -33,8 +34,8 @@ const gallaryLibOptions = {
 
 async function onSubmit(e) {
   e.preventDefault();
-  let inputValue = e.currentTarget.elements.searchQuery.value.trim();
-  
+   inputValue = e.currentTarget.elements.searchQuery.value.trim();
+  console.log(inputValue);
     if (!inputValue) {
       console.log(!inputValue)
       Notify.warning(FAILE_MESSADGE, OPTIONS_NOTIFLIX);
@@ -74,9 +75,9 @@ async function onSubmit(e) {
 async function onMoreBtn() {
   page += 1;
   console.log(page);
-
+console.log(inputValue);
   try {
-    const { data } = await axiosMoreRequst(page);
+    const { data } = await axiosMoreRequst(inputValue, page);
     renderMarkup(data.hits, renderGallery);
     gallary.refresh()
     
@@ -87,9 +88,9 @@ async function onMoreBtn() {
     });
     
     let countOfViwedHits = data.totalHits <= page * 40;
-    console.log(countOfViwedHits);
+  
     if (countOfViwedHits) {
-      moreBtn.classList.remove("is-hidden")
+      moreBtn.classList.add("is-hidden")
       Notify.info(END_MASSADGE, OPTIONS_NOTIFLIX);
     }
     
