@@ -75,7 +75,7 @@ async function onSubmit(e) {
 async function onMoreBtn() {
   page += 1;
   console.log(page);
-console.log(inputValue);
+
   try {
     const { data } = await axiosMoreRequst(inputValue, page);
     renderMarkup(data.hits, renderGallery);
