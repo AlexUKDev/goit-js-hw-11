@@ -1,7 +1,7 @@
 
 const refs = {
   form: document.querySelector('#search-form'),
-  moreBtn: document.querySelector('button[type="button"].load-more'),
+  moreBtn: document.querySelector('button.load-more'),
   renderGallery: document.querySelector('div.gallery'),
   };
 

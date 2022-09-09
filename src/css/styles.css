@@ -24,7 +24,7 @@ img{
   justify-content: center;
   align-items: center;
   padding: 20px 0px;
-  margin-bottom: 15px;
+  
   background-color: var(--header-bg-color);
 }
 .search-form{
@@ -85,7 +85,7 @@ img{
 }
 
 .gallery{
-  margin-top: 105px;
+  margin-top: 110px;
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 15px;

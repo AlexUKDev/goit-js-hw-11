@@ -17,7 +17,7 @@ const OPTIONS_NOTIFLIX = {
   width: "430px",
   fontSize: "25px",
   timeout: "3000",
-  distance:"20px",
+  distance:"15px",
   cssAnimationDuration:"500",
   borderRadius: "20px",
   fontAwesomeIconStyle: "shadow",
@@ -49,13 +49,16 @@ async function onSubmit(e) {
         return
         }
 
-      if (data.totalHits <= 40) {
-        moreBtn.classList.toggle("is-hidden") 
-        }
       
       cleanMarckup(renderGallery);
       renderMarkup(data.hits, renderGallery);
-      moreBtn.classList.toggle("is-hidden")
+      
+    //  условия отображения кнопки Load more
+      if (data.totalHits <= 40) {
+          moreBtn.classList.add("is-hidden");
+      } else {
+        moreBtn.classList.remove("is-hidden")
+      }
       
       Notify.success(makeTotalMassage(data.totalHits), OPTIONS_NOTIFLIX);
       
@@ -84,10 +87,10 @@ async function onMoreBtn() {
     });
     
     let countOfViwedHits = data.totalHits <= page * 40;
-    
-    if (countOfViwedHits === true) {
-      moreBtn.classList.toggle("is-hidden") 
-       Notify.info(END_MASSADGE, OPTIONS_NOTIFLIX);
+    console.log(countOfViwedHits);
+    if (countOfViwedHits) {
+      moreBtn.classList.remove("is-hidden")
+      Notify.info(END_MASSADGE, OPTIONS_NOTIFLIX);
     }
     
   } catch (err) {
