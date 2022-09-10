@@ -11,9 +11,9 @@ form.addEventListener('submit', onSubmit);
 moreBtn.addEventListener('click', onMoreBtn);
 
 let page = 1;
-let gallary = {};
 let inputValue = null;
 
+// Options obj for libs
 const OPTIONS_NOTIFLIX = {
   width: "430px",
   fontSize: "25px",
@@ -29,57 +29,51 @@ const gallaryLibOptions = {
   captionsData: "alt",
   captionDelay: 250
 };
-
-
+const gallary = new SimpleLightbox('.gallery a', gallaryLibOptions);
 
 async function onSubmit(e) {
-  e.preventDefault();
-   inputValue = e.currentTarget.elements.searchQuery.value.trim();
+    e.preventDefault();
+    inputValue = e.currentTarget.elements.searchQuery.value.trim();
   
-    if (!inputValue) {
-      console.log(!inputValue)
-      Notify.warning(FAILE_MESSADGE, OPTIONS_NOTIFLIX);
-      return
-    } 
+      if (!inputValue) {
+        Notify.warning(FAILE_MESSADGE, OPTIONS_NOTIFLIX);
+        return
+      } 
     page = 1;
    
     try {
-      const { data } = await axiosRequst(inputValue, page);
-      if (data.hits.length === 0) {
-        Notify.info(EMPTY_RESPONSE, OPTIONS_NOTIFLIX);
-        return
-        }
-
+        const { data } = await axiosRequst(inputValue, page);
+          if (data.hits.length === 0) {
+            Notify.info(EMPTY_RESPONSE, OPTIONS_NOTIFLIX);
+            return
+          }
       
       cleanMarckup(renderGallery);
       renderMarkup(data.hits, renderGallery);
       
     //  условия отображения кнопки Load more
-      if (data.totalHits <= 40) {
-          moreBtn.classList.add("is-hidden");
-      } else {
-        moreBtn.classList.remove("is-hidden")
-      }
+        if (data.totalHits <= 40) {
+            moreBtn.classList.add("is-hidden");
+          } else {
+          moreBtn.classList.remove("is-hidden")
+        };
       
       Notify.success(makeTotalMassage(data.totalHits), OPTIONS_NOTIFLIX);
-      
-      gallary = new SimpleLightbox('.gallery a', gallaryLibOptions);
-      
+      gallary.refresh()
+
       } catch (err) {
         console.log(err)
         Notify.failure(ERROR_MASSADGE, OPTIONS_NOTIFLIX);
       }
-
 }
 
 async function onMoreBtn() {
   page += 1;
-  console.log(page);
 
   try {
     const { data } = await axiosMoreRequst(inputValue, page);
     renderMarkup(data.hits, renderGallery);
-    gallary.refresh()
+    gallary.refresh();
     
     const { height: cardHeight } = document.querySelector(".gallery").firstElementChild.getBoundingClientRect();
     window.scrollBy({
@@ -90,27 +84,14 @@ async function onMoreBtn() {
     let countOfViwedHits = data.totalHits <= page * 40;
   
     if (countOfViwedHits) {
-      moreBtn.classList.add("is-hidden")
+      moreBtn.classList.add("is-hidden");
       Notify.info(END_MASSADGE, OPTIONS_NOTIFLIX);
     }
     
   } catch (err) {
-    console.log(err)
+    console.log(err);
     Notify.failure(ERROR_MASSADGE, OPTIONS_NOTIFLIX);
   }
   }
 
 
-
-
-
-
-
-// e.g. Only message
-// Notiflix.Notify.success('Sol lucet omnibus');
-
-// Notiflix.Notify.failure('Qui timide rogat docet negare');
-
-// Notiflix.Notify.warning('Memento te hominem esse');
-
-// Notiflix.Notify.info('Cogito ergo sum');
