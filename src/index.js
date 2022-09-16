@@ -52,11 +52,11 @@ async function onSubmit(e) {
       renderMarkup(data.hits, renderGallery);
       
     //  условия отображения кнопки Load more
-        if (data.totalHits <= 40) {
-            moreBtn.classList.add("is-hidden");
-          } else {
-          moreBtn.classList.remove("is-hidden")
-        };
+        // if (data.totalHits <= 40) {
+        //     moreBtn.classList.add("is-hidden");
+        //   } else {
+        //   moreBtn.classList.remove("is-hidden")
+        // };
       
       Notify.success(makeTotalMassage(data.totalHits), OPTIONS_NOTIFLIX);
       gallary.refresh()
@@ -84,7 +84,7 @@ async function onMoreBtn() {
     let countOfViwedHits = data.totalHits <= page * 40;
   
     if (countOfViwedHits) {
-      moreBtn.classList.add("is-hidden");
+      // moreBtn.classList.add("is-hidden");
       Notify.info(END_MASSADGE, OPTIONS_NOTIFLIX);
     }
     
@@ -94,4 +94,15 @@ async function onMoreBtn() {
   }
   }
 
+window.addEventListener('scroll', infScroll)
 
+function infScroll() {
+  const documentRect = document.documentElement.getBoundingClientRect();
+  console.log('top', document.documentElement.clientHeight);
+  console.log('bottom', documentRect.bottom);
+
+  if (documentRect.bottom < document.documentElement.clientHeight + 300) {
+    
+    onMoreBtn()
+  }
+}
