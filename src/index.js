@@ -98,8 +98,8 @@ window.addEventListener('scroll', infScroll)
 
 function infScroll() {
   const documentRect = document.documentElement.getBoundingClientRect();
-  console.log('top', document.documentElement.clientHeight);
-  console.log('bottom', documentRect.bottom);
+  // console.log('top', document.documentElement.clientHeight);
+  // console.log('bottom', documentRect.bottom);
 
   if (documentRect.bottom < document.documentElement.clientHeight + 300) {
     
